@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | Grocery Store</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+
+    <style>
+        /* --- COLOR PALETTE (Consistent Theme) --- */
+        :root {
+            --bs-primary: #32CD32; /* Lime Green */
+            --bs-primary-rgb: 50, 205, 50;
+            --bs-success: #32CD32;
+            --bs-success-rgb: 50, 205, 50;
+            --bs-danger: #DC3545;
+            --bs-secondary: #6c757d;
+            --bs-dark-black: #000000;
+            --bs-light: #f7f9fc;
+            --bs-white: #ffffff;
+            --bs-body-font-family: 'Poppins', sans-serif;
+            --bs-heading-font-family: 'Playfair Display', serif;
+        }
+
+        body {
+            font-family: var(--bs-body-font-family);
+            background-color: var(--bs-light);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-top: 75px; /* Space for fixed navbar */
+        }
+
+        /* --- Navbar/Header (Consistent Style) --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            background-color: var(--bs-white) !important;
+        }
+
+        .navbar-brand {
+            color: var(--bs-primary) !important;
+            font-size: 1.8rem !important;
+            font-weight: 700 !important;
+        }
+        .navbar-brand .bi-bag-fill {
+            font-size: 1.5rem;
+            color: var(--bs-primary);
+        }
+
+        /* Button Styling (Consistent Style) */
+        .btn-success {
+             background-color: var(--bs-primary) !important;
+             border-color: var(--bs-primary) !important;
+             color: var(--bs-white) !important;
+             font-weight: 700;
+             transition: transform 0.2s, opacity 0.2s;
+        }
+        .btn-success:hover {
+             transform: translateY(-2px);
+             opacity: 0.9;
+        }
+
+        /* --- Card Styles --- */
+        .card {
+            border-radius: 1rem;
+            border: none;
+        }
+
+        /* --- Order List Item Customization --- */
+        .list-group-item-action {
+            /* Ensures list items are stacked nicely on small screens */
+            flex-direction: column;
+            align-items: flex-start !important;
+            padding: 1.5rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #e9ecef;
+            transition: all 0.2s;
+        }
+        .list-group-item-action:hover {
+            background-color: var(--bs-light);
+            border-color: var(--bs-primary);
+        }
+
+        /* Product row inside order list */
+        .list-group-item-action .row {
+            width: 100%;
+            margin-top: 1rem !important;
+            border: 1px solid #ddd !important;
+            border-radius: 0.5rem !important;
+            padding: 0.5rem !important;
+        }
+        .list-group-item-action img {
+            border-radius: 0.5rem !important;
+        }
+
+
+        /* --- Footer (Consistent Style) --- */
+        .footer-bg { background-color: #2c3e50 !important; color: #ccc; margin-top: auto; }
+        .footer-bg h5 {
+            color: var(--bs-primary) !important;
+            font-weight: 700;
+            border-left: 3px solid #ccc;
+            padding-left: 10px;
+        }
+        .footer-bg a { color: #ccc !important; text-decoration: none;}
+        .footer-bg a:hover { color: var(--bs-primary) !important; }
+        .footer-bg .fs-4:hover { color: var(--bs-primary) !important; }
+    </style>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container-xl">
+        <a class="navbar-brand fw-bold" th:href="@{/api/Homepage}">
+            <i class="bi bi-bag-fill me-2"></i>
+            Grocery Store
+        </a>
+    </div>
+</nav>
+<main class="flex-fill container my-5">
+    <h2 class="fw-bold mb-4 text-center">
+        <i class="bi bi-box-seam me-2 text-success"></i> Your Orders
+    </h2>
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+            <div class="card-header bg-white p-4">
+                <h5 class="mb-0 fw-bold d-flex justify-content-between align-items-center">
+                    All Orders Placed
+                    <span class="badge text-bg-success rounded-pill"
+                          th:text="${allOrders.size()}">0</span>
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <div th:if="${allOrders.empty}" class="alert alert-warning text-center">
+                    <i class="bi bi-info-circle-fill me-2"></i> You haven't placed any orders yet.
+                </div>
+
+                <div class="list-group" th:if="${!allOrders.empty}">
+                    <a class="list-group-item list-group-item-action"
+                       th:each="o : ${allOrders}"
+                       th:href="@{/orderPlaced/details/{id}(id=${o.id})}">
+
+                        <div class="d-flex w-100 justify-content-between mb-2">
+                            <h6 class="mb-1 fw-bold">
+                                Order :<span th:text="${o.id}"></span>
+                            </h6>
+                        </div>
+
+                        <div class="row mt-2 align-items-center border rounded p-2"
+                             th:each="p : ${o.products}">
+
+                            <div class="col-2 col-md-1">
+                                <img th:src="@{/product/image/{id}(id=${p.id})}"
+                                     class="img-fluid rounded"
+                                     style="height: 50px; width: 50px; object-fit: cover;">
+                            </div>
+
+                            <div class="col-10 col-md-11">
+                                <div class="d-flex justify-content-between">
+                                    <span class="fw-semibold" th:text="${p.name}">Product Name</span>
+                                    <span class="fw-bold text-success">
+                                            ₹ <span th:text="${p.price}">0</span>
+                                        </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<footer class="footer-bg pt-5 pb-3 mt-5">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-3 mb-3">
+                <h5 class="fw-bold">Contact Us</h5>
+                <p class="small">Email: <a href="mailto:support@grocerystore.com" class="text-decoration-none">support@grocerystore.com</a></p>
+                <p class="small">Phone: +91 1234567890</p>
+                <p class="small">Address: 123, Market Street, City</p>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <h5 class="fw-bold">About Us</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-decoration-none">Our Story</a></li>
+                    <li><a href="#" class="text-decoration-none">Return Policy</a></li>
+                    <li><a href="#" class="text-decoration-none">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <h5 class="fw-bold">Customer Support</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-decoration-none">Help Center</a></li>
+                    <li><a href="#" class="text-decoration-none">Track Order</a></li>
+                    <li><a href="#" class="text-decoration-none">FAQs</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <h5 class="fw-bold">Follow Us</h5>
+                <a href="#" class="me-3 fs-4"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="me-3 fs-4"><i class="bi bi-twitter"></i></a>
+                <a href="#" class="fs-4"><i class="bi bi-instagram"></i></a>
+            </div>
+
+        </div>
+
+        <hr class="border-light">
+
+        <p class="text-center mb-0 small text-white">
+            &copy; 2025 Grocery Store. All rights reserved.
+        </p>
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocery Store - Home</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+
+    <style>
+        /* --- COLOR PALETTE (Unchanged) --- */
+        :root {
+            --bs-primary: #32CD32;
+            --bs-primary-rgb: 50, 205, 50;
+            --bs-success: #32CD32;
+            --bs-success-rgb: 50, 205, 50;
+            --bs-danger: #DC3545;
+            --bs-secondary: #6c757d;
+            --bs-dark-black: #000000;
+            --bs-light: #f7f9fc;
+            --bs-white: #ffffff;
+            --bs-body-font-family: 'Poppins', sans-serif;
+            --bs-heading-font-family: 'Playfair Display', serif;
+        }
+
+        body {
+            font-family: var(--bs-body-font-family);
+            background-color: var(--bs-light);
+        }
+
+        /* --- CARD HOVER EFFECT (ZOOM ANIMATION ONLY - NO COLOR) --- */
+        .shadow-sm-hover {
+            transition: all 0.35s ease-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e0e0e0;
+        }
+
+        .shadow-sm-hover:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: #e0e0e0;
+        }
+
+        /* --- Navbar/Header (Unchanged) --- */
+        .navbar.sticky-top {
+            z-index: 1030;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            background-color: var(--bs-white) !important;
+            border-bottom: none;
+        }
+
+        .navbar-brand {
+            color: var(--bs-primary) !important;
+            font-size: 1.8rem !important;
+        }
+
+        .btn-outline-primary {
+             color: var(--bs-primary) !important;
+             border-color: var(--bs-primary) !important;
+        }
+        .btn-outline-primary:hover {
+             background-color: var(--bs-light) !important;
+             color: var(--bs-primary) !important;
+             border-color: var(--bs-primary) !important;
+        }
+
+        .input-group .btn-dark {
+             background-color: var(--bs-dark-black) !important;
+             border-color: var(--bs-dark-black) !important;
+             color: var(--bs-white) !important;
+        }
+
+        .btn-success, .btn-primary {
+             background-color: var(--bs-primary) !important;
+             border-color: var(--bs-primary) !important;
+             color: var(--bs-white) !important;
+             border-radius: 50px;
+             padding: 10px 30px;
+             font-weight: 700;
+             transition: transform 0.2s, opacity 0.2s;
+        }
+        .btn-success:hover, .btn-primary:hover {
+             transform: translateY(-2px);
+             opacity: 0.9;
+        }
+
+        /* --- Ads Section (Images Confirmed HD) --- */
+        .hero-banner {
+            height: 500px;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-color: var(--bs-secondary); /* Fallback color */
+            position: relative;
+        }
+
+        /* Dark overlay to ensure text readability */
+        .hero-banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.25);
+            z-index: 1;
+        }
+
+        .hero-overlay {
+            position: relative;
+            z-index: 2;
+        }
+
+        .carousel-inner {
+             border-radius: 0;
+             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        .hero-title { font-family: var(--bs-heading-font-family); font-size: 3.5rem; }
+
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        /* --- Section Headings (Unchanged) --- */
+        .section-heading {
+             font-size: 2.2rem;
+             color: var(--bs-dark-black);
+             font-family: var(--bs-heading-font-family);
+        }
+
+        /* --- Card Styles (Unchanged) --- */
+        .category-card, .product-card {
+            border-radius: 1rem;
+            overflow: hidden;
+            background-color: var(--bs-white);
+        }
+
+        .category-img { height: 160px; object-fit: cover; }
+        .product-img { height: 220px; object-fit: cover; }
+
+        .price-text {
+            font-size: 1.5rem;
+            color: var(--bs-primary);
+            font-weight: 700;
+        }
+
+        /* --- Footer (Unchanged) --- */
+        .footer-bg { background-color: #2c3e50 !important; color: #ccc; }
+        .footer-bg h5 {
+            color: var(--bs-primary) !important;
+            font-weight: 700;
+            border-left: 3px solid #ccc;
+            padding-left: 10px;
+        }
+
+        .footer-bg hr {
+             border-color: rgba(255, 255, 255, 0.4) !important;
+             opacity: 0.8;
+        }
+
+        .footer-bg a { color: #000000; }
+        .footer-bg a:hover { color: var(--bs-primary) !important; }
+        .footer-bg .small a { color: #ccc; }
+        .footer-bg .small a:hover { color: var(--bs-primary) !important; }
+        .footer-bg .list-unstyled a { color: #ccc !important; }
+        .footer-bg .list-unstyled a:hover { color: var(--bs-primary) !important; }
+
+        .footer-bg a.fs-4 { color: #ccc !important; }
+        .footer-bg a.fs-4:hover { color: var(--bs-primary) !important; }
+
+        /* ANimation Classes (Unchanged) */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { opacity: 0; animation: fadeUp 0.6s ease-out forwards; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        .stagger-delay-1 { animation-delay: 0.1s; }
+        .stagger-delay-2 { animation-delay: 0.2s; }
+        .stagger-delay-3 { animation-delay: 0.3s; }
+        .stagger-delay-4 { animation-delay: 0.4s; }
+        .stagger-delay-5 { animation-delay: 0.5s; }
+        .stagger-delay-6 { animation-delay: 0.6s; }
+        .stagger-delay-7 { animation-delay: 0.7s; }
+        .stagger-delay-8 { animation-delay: 0.8s; }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container-xl">
+        <a class="navbar-brand fw-bold" th:href="@{/}">
+            <i class="bi bi-bag-fill me-2" style="font-size: 1.5rem; color: var(--bs-primary);"></i>
+            Grocery Store
+        </a>
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="menu">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item dropdown fade-in stagger-delay-1">
+                    <a class="nav-link dropdown-toggle"
+                       href="#"
+                       data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                        Categories
+                    </a>
+                    <ul class="dropdown-menu shadow">
+                        <li><a class="dropdown-item" th:href="@{/api/product/Staples}">Staples</a></li>
+                        <li><a class="dropdown-item" th:href="@{/api/product/Snacks}">Snacks</a></li>
+                        <li><a class="dropdown-item" th:href="@{/api/product/Beverages}">Beverages</a></li>
+                        <li><a class="dropdown-item" th:href="@{/api/product/Household}">Household</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item fade-in stagger-delay-2">
+                    <a class="nav-link" th:href="@{/api/discount}">Discount</a>
+                </li>
+            </ul>
+
+            <div class="mobile-filter-container d-lg-none w-100 fade-in stagger-delay-3">
+                <form th:action="@{/filter/category}" method="get">
+                    <h6 class="fw-bold text-dark mb-3"><i class="bi bi-funnel-fill me-2"></i>Apply Filters</h6>
+                    <div class="row g-2">
+                        <div class="col-12"><input type="text" class="form-control" placeholder="Search products..." name="searchValue"></div>
+                        <div class="col-sm-6">
+                            <label class="form-label small mb-0">Category</label>
+                            <select class="form-select" name="category">
+                                <option value="categories">All Categories</option>
+                                <option value="Staples">Staples</option>
+                                <option value="Beverages">Beverages</option>
+                                <option value="Snacks">Snacks</option>
+                                <option value="HouseHold">HouseHold</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label small mb-0">Price Range</label>
+                            <select class="form-select" name="price">
+                                <option value="0-0">Any Price</option>
+                                <option value="0-30">₹0 - ₹30</option>
+                                <option value="31-60">₹31 - ₹60</option>
+                                <option value="61-100">₹61 - ₹100</option>
+                            </select>
+                        </div>
+                        <div class="col-12 mt-3"><button class="btn btn-dark w-100" type="submit">Apply Filter & Search</button></div>
+                    </div>
+                </form>
+            </div>
+
+
+            <form class="d-none d-lg-flex align-items-center desktop-search-container me-lg-4" th:action="@{/filter/category}" method="get">
+                <div class="input-group shadow-sm fade-in stagger-delay-3 w-100">
+                    <button class="btn btn-dark filter filter-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-funnel-fill"></i></button>
+                    <div class="dropdown-menu p-3 shadow-lg" style="min-width: 250px;">
+                        <h6 class="dropdown-header fw-bold">Filter Options</h6>
+                        <h6 class="dropdown-header fw-bold mt-2">Category</h6>
+                        <select class="form-select mb-3" name="category">
+                            <option value="categories">All Categories</option>
+                            <option value="Staples">Staples</option>
+                            <option value="Beverages">Beverages</option>
+                            <option value="Snacks">Snacks</option>
+                            <option value="HouseHold">HouseHold</option>
+                        </select>
+                        <h6 class="dropdown-header fw-bold">Price Range</h6>
+                        <select class="form-select mb-3" name="price">
+                            <option value="0-0">Any Price</option>
+                            <option value="0-30">₹0 - ₹30</option>
+                            <option value="31-60">₹31 - ₹60</option>
+                            <option value="61-100">₹61 - ₹100</option>
+                        </select>
+                        <button class="btn btn-dark w-100" type="submit">Apply Filter</button>
+                    </div>
+                    <input type="text" id="searchProduct" class="form-control" placeholder="Search products..." name="searchValue">
+                    <button class="btn btn-dark" type="submit"><i class="bi bi-search"></i></button>
+                </div>
+            </form>
+
+            <div class="d-flex align-items-center mt-3 mt-lg-0">
+                <a class="btn btn-outline-primary position-relative me-3 fade-in stagger-delay-4" th:href="@{/view/cart}">
+                    <i class="bi bi-cart-fill me-1"></i> Cart
+                    <span class="badge text-bg-danger rounded-pill position-absolute top-0 start-100 translate-middle" th:text="${cartCount}">0</span>
+                </a>
+                <div class="dropdown fade-in stagger-delay-5">
+                    <button class="btn btn-outline-secondary rounded-circle p-2"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-fill" style="font-size: 1.2rem; color: var(--bs-primary);"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow">
+                        <li><a class="dropdown-item" th:href="@{/login}"><i class="bi bi-box-arrow-in-right me-2"></i> Login</a></li>
+                        <li><a class="dropdown-item" th:href="@{/api/Signup}"><i class="bi bi-person-plus-fill me-2"></i> Sign Up</a></li>
+                        <li><a class="dropdown-item" th:href="@{/order}"><i class="bi bi-file-earmark-text-fill me-2"></i> My Orders</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+
+<main class="flex-fill">
+
+    <section class="container-fluid fade-in px-0 mt-0">
+        <div id="heroCarousel" class="carousel slide carousel-fade mx-0" data-bs-ride="carousel" data-bs-interval="4000">
+
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+            </div>
+
+            <div class="carousel-inner shadow-lg">
+
+                <div class="carousel-item active hero-banner" style="background-image:url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');">
+                    <div class="hero-overlay h-100 w-100 d-flex align-items-center justify-content-start ps-5">
+                        <div class="ms-3 p-4 text-white">
+                            <h1 class="fw-bold hero-title">Farm Fresh Produce Delivered</h1>
+                            <p class="fs-4">Flat 30% off on first basket</p>
+                            <a href="#" class="btn btn-lg btn-success fw-bold shadow-lg mt-2">Shop Now <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-item hero-banner" style="background-image:url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');">
+                    <div class="hero-overlay h-100 w-100 d-flex align-items-center justify-content-start ps-5">
+                        <div class="ms-3 p-4 text-white">
+                            <h1 class="fw-bold hero-title">Pantry Staples & Bulk Deals</h1>
+                            <p class="fs-4">Limited Stock: Flash Sale!</p>
+                            <a href="#" class="btn btn-lg btn-danger fw-bold shadow-lg mt-2">View Deals <i class="bi bi-fire"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-item hero-banner" style="background-image:url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');">
+                    <div class="hero-overlay h-100 w-100 d-flex align-items-center justify-content-start ps-5">
+                        <div class="ms-3 p-4 text-white">
+                            <h1 class="fw-bold hero-title">Quench Your Thirst with New Arrivals</h1>
+                            <p class="fs-4">Special weekend discounts</p>
+                            <a href="#" class="btn btn-lg btn-success fw-bold shadow-lg mt-2">See Menu <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-item hero-banner" style="background-image:url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); background-position: center;">
+                    <div class="hero-overlay h-100 w-100 d-flex align-items-center justify-content-start ps-5">
+                        <div class="ms-3 p-4 text-white">
+                            <h1 class="fw-bold hero-title">Snack Time Favorites</h1>
+                            <p class="fs-4">Buy 1 Get 1 <span class="text-warning">Free</span> on select brands!</p>
+                            <a href="#" class="btn btn-lg btn-success fw-bold shadow-lg mt-2">Shop Snacks <i class="bi bi-bag-fill"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-item hero-banner" style="background-image:url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); background-position: center;">
+                    <div class="hero-overlay h-100 w-100 d-flex align-items-center justify-content-start ps-5">
+                        <div class="ms-3 p-4 text-white">
+                            <h1 class="fw-bold hero-title">Deep Cleaning Essentials</h1>
+                            <p class="fs-4">Save up to <span class="text-info">40%</span> on cleaning supplies.</p>
+                            <a href="#" class="btn btn-lg btn-danger fw-bold shadow-lg mt-2">View Deals <i class="bi bi-lightbulb-fill"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </section>
+
+
+    <section class="container mt-5">
+        <h2 class="fw-bold mb-4 text-center section-heading fade-up">Shop by Category</h2>
+
+
+        <div class="row justify-content-center g-4">
+
+            <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                <a th:href="@{/api/product/Staples}" class="text-decoration-none text-dark">
+                    <div class="card category-card h-100 shadow-sm-hover fade-up stagger-delay-1">
+                        <img src="https://img.freepik.com/free-photo/assortment-grains-legumes_23-2148988042.jpg"
+                             class="card-img-top category-img" alt="Staples">
+                        <div class="card-body text-center">
+                            <h5 class="fw-semibold mb-0">Staples</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                <a th:href="@{/api/product/Snacks}" class="text-decoration-none text-dark">
+                    <div class="card category-card h-100 shadow-sm-hover fade-up stagger-delay-2">
+                        <img src="https://img.freepik.com/free-photo/snack-assortment-table_23-2148515527.jpg"
+                             class="card-img-top category-img" alt="Snacks">
+                        <div class="card-body text-center">
+                            <h5 class="fw-semibold mb-0">Snacks</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                <a th:href="@{/api/product/Beverages}" class="text-decoration-none text-dark">
+                    <div class="card category-card h-100 shadow-sm-hover fade-up stagger-delay-3">
+                        <img src="https://img.freepik.com/free-photo/fresh-juice-glasses_23-2148562936.jpg"
+                             class="card-img-top category-img" alt="Beverages">
+                        <div class="card-body text-center">
+                            <h5 class="fw-semibold mb-0">Beverages</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                <a th:href="@{/api/product/Household}" class="text-decoration-none text-dark">
+                    <div class="card category-card h-100 shadow-sm-hover fade-up stagger-delay-4">
+                        <img src="https://img.freepik.com/free-photo/cleaning-supplies-arrangement_23-2148976258.jpg"
+                             class="card-img-top category-img" alt="Household">
+                        <div class="card-body text-center">
+                            <h5 class="fw-semibold mb-0">Household</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="container mt-5 mb-5">
+        <h2 class="fw-bold mb-4 text-center section-heading fade-up stagger-delay-1">Featured Products</h2>
+
+        <div class="row g-4 justify-content-center">
+
+            <div class="col-6 col-sm-6 col-md-4 col-lg-3"
+                 th:each="p, stat : ${snacksProduct}">
+
+                <div class="card h-100 product-card shadow-sm-hover fade-up" th:attrappend="class=' stagger-delay-' + ${stat.count}">
+                    <img th:src="@{'/images/' + ${p.id}}"
+                         class="card-img-top product-img"
+                         alt="Product Image">
+
+                    <div class="card-body text-center d-flex flex-column">
+
+                        <h5 class="fw-semibold text-truncate mb-1"
+                            th:text="${p.name}"></h5>
+
+                        <p class="price-text mb-3"
+                           th:text="'₹' + ${p.price}">₹</p>
+
+                        <div class="mt-auto d-grid gap-2">
+                            <a th:href="@{/api/product/images/ProductDetails/{id}(id=${p.id})}"
+                               class="btn btn-outline-secondary btn-sm">
+                                View
+                            </a>
+
+                            <form th:action="@{/save/cart}" method="post">
+                                <input type="hidden" name="productId" th:value="${p.id}">
+                                <button type="submit" class="btn btn-success btn-sm w-100">
+                                    Add to Cart
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+
+<footer class="footer-bg pt-5 pb-3 mt-5">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-3 mb-3">
+                <h5 class="fw-bold">Contact Us</h5>
+                <p class="small">Email: <a href="mailto:support@grocerystore.com" class="text-decoration-none">support@grocerystore.com</a></p>
+                <p class="small">Phone: +91 1234567890</p>
+                <p class="small">Address: 123, Market Street, City</p>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <h5 class="fw-bold">About Us</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-decoration-none">Our Story</a></li>
+                    <li><a href="#" class="text-decoration-none">Return Policy</a></li>
+                    <li><a href="#" class="text-decoration-none">Privacy Policy</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <h5 class="fw-bold">Customer Support</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-decoration-none">Help Center</a></li>
+                    <li><a href="#" class="text-decoration-none">Track Order</a></li>
+                    <li><a href="#" class="text-decoration-none">FAQs</a></li>
+                </ul>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <h5 class="fw-bold">Follow Us</h5>
+                <a href="#" class="me-3 fs-4"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="me-3 fs-4"><i class="bi bi-twitter"></i></a>
+                <a href="#" class="fs-4"><i class="bi bi-instagram"></i></a>
+            </div>
+        </div>
+
+        <hr class="border-light">
+        <p class="text-center mb-0 small text-white">
+            &copy; 2025 Grocery Store. All rights reserved.
+        </p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
